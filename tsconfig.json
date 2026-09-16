@@ -2,7 +2,7 @@
     "compilerOptions": {
         "module": "esnext",
         "moduleResolution": "bundler",
-        "target": "es2023",
+        "target": "esnext",
         "rootDir": "./",
         "outDir": "./dist",
         "strict": true,

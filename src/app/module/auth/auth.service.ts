@@ -19,7 +19,7 @@ import { OAuth2Client, type TokenPayload } from "google-auth-library";
 import { googleClient } from "../../lib/googleAuth";
 
 const registerPatient = async (payload: IRegisterPatientPayload) => {
-	const { name, password } = payload;
+	const { name, password, patient: patientData } = payload;
 
 	if (typeof password !== "string" || password.length === 0) {
 		throw new Error("Password is required");
@@ -46,7 +46,11 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
 			status: UserStatus.ACTIVE,
 			emailVerified: false,
 			patient: {
-				create: { name, email },
+				create: {
+					name,
+					email,
+					contactNumber: patientData?.contactNumber || "",
+				},
 			},
 		},
 		omit: { password: true },

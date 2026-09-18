@@ -5,8 +5,22 @@ import { sendResponse } from "../../utils/sendResponse";
 import type { IRequestUser } from "./auth.interface";
 import { AuthService } from "./auth.service";
 import config from "../../config";
+import z from "zod";
+import { UserValidation } from "./auth.validation";
 
 const registerPatient = catchAsync(async (req: Request, res: Response) => {
+	// const payload = UserValidation.patientRegitrationZodSchema.safeParse(req.body);
+
+	// if (!payload.success) {
+	// 	// console.log(payload.error);
+	// 	// console.log(payload.error.issues);
+	// 	// let errorMessages = "";
+	// 	// payload.error.issues.forEach((issue) => {
+	// 	// 	errorMessages = errorMessages + issue.message
+	// 	// })
+	// 	// throw new Error(errorMessages);
+	// 	throw new Error(payload.error.issues[0].message);
+	// }
 	const payload = req.body;
 	const result = await AuthService.registerPatient(payload);
 

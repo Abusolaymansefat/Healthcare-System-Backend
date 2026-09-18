@@ -1,0 +1,181 @@
+{
+  "info": {
+    "_postman_id": "67e26abe-6496-4f1a-a316-e711cd3a089e",
+    "name": "Healthcare System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54718571",
+    "_collection_link": "https://go.postman.co/collection/54718571-67e26abe-6496-4f1a-a316-e711cd3a089e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "refresh-token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/refresh-token",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Test Patient2\",\r\n    \"email\": \"patient4@example.com\",\r\n    \"password\": \"Password123!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"patient4@example.com\",\r\n    \"password\": \"Password123!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/me",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "google",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"idToken\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6ImYxMGY4NzQwNWE5NzljMWRmMzZkZjI2NjA2NzM0ZjMzY2Q4NWMyNzEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI1MjExODcxMTAwOTUtYTVkNXZsMWFhb3Rla25xcG5sMzVlZzlrdW8zMDRrdWMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI1MjExODcxMTAwOTUtYTVkNXZsMWFhb3Rla25xcG5sMzVlZzlrdW8zMDRrdWMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTQ4NDUyNTMwMTM3MTA3NTM2NjUiLCJlbWFpbCI6ImFidXNvbGF5bWFuc2VmYXQ2OUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmJmIjoxNzg5NjY0MDQ0LCJuYW1lIjoiQWJ1IFNvbGF5bWFuIFNlZmF0IiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0pHLW1FdVRSUlM1c3E5UGRkUi1TcE9UNHI2OWs3d3ZiRVhvc0lzZFBIdzhOMmYxdz1zOTYtYyIsImdpdmVuX25hbWUiOiJBYnUgU29sYXltYW4iLCJmYW1pbHlfbmFtZSI6IlNlZmF0IiwiaWF0IjoxNzg5NjY0MzQ0LCJleHAiOjE3ODk2Njc5NDQsImp0aSI6IjRhZDQwNDEwZmY1MzBmOGJkZGQzYjlkYWQ3MTkwODVmNmM0NzY5OTQifQ.OBxmF9nuSM8YfuNV9uTgQqXdeBZtR9kLptgOzP5oxvISUHc8Ld3Xzw0PCFYRHNgRDk5n6GbkO-2fYNDYAfzgDWGXB9FAAIITt_m4Y31VrLxboahX76xXeXp9--2OG8jlEfIacpmXHEjDoW_wagulDQzywqXZiWm7TENsTj10Vt99UvZuMvS5z-YD93es0eCgJR-f72DK5xUcwaipxm6Rxp1FRArOkp6UApxHxQbmwUZqvbwXNoCNsFXYOjkWH6D6B0eXI_bdQin1hpBxeBxR3wzvHfn9oSX_NZRpbrHjdL2g0tZnZOqWD2G82A8jtoYhvh2N0AztbVpKZrG2EUpGxA\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/google",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "google"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "zod",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Test Patient\",\r\n    \"email\": \"patient@example.com\",\r\n    \"password\": \"password123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/zod",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "zod"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

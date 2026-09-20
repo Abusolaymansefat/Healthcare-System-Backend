@@ -1,5 +1,6 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import crypto from "crypto";
 import express, {
 	type Application,
 	type NextFunction,
@@ -12,6 +13,7 @@ import config from "./app/config";
 import { globalErrorHandler } from "./app/middleware/globalErrorHandler";
 import { notFound } from "./app/middleware/notFound";
 import { AuthRoutes } from "./app/module/auth/auth.route";
+import { redisClient } from "./app/lib/redis";
 
 const app: Application = express();
 
@@ -31,25 +33,68 @@ app.use(cookieParser());
 
 app.use("/api/v1/auth", AuthRoutes);
 
-app.post("/zod", async (req: Request, res: Response, next: NextFunction) => {
+// zod testing route
+// app.post("/zod", async (req: Request, res: Response, next: NextFunction) => {
+// 	try {
+// 		const UserZodSchema = z.object({
+// 			name: z.string(),
+// 			email: z.string(),
+// 			age: z.number().optional(),
+// 			isVerified: z.boolean().optional(),
+// 			books: z.array(z.string()).optional(),
+// 		});
+// 		const payload = req.body;
+
+// 		const result = UserZodSchema.parse(payload);
+
+// 		console.log(result);
+
+// 		res.status(httpStatus.OK).json({
+// 			success: true,
+// 			message: "Welcome to PH Healthcare System Backend",
+// 			data: result,
+// 		});
+// 	} catch (error) {
+// 		console.log(error);
+// 		next(error);
+// 	}
+// });
+
+app.get("/test", async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const UserZodSchema = z.object({
-			name: z.string(),
-			email: z.string(),
-			age: z.number().optional(),
-			isVerified: z.boolean().optional(),
-			books: z.array(z.string()).optional(),
-		});
-		const payload = req.body;
+		const otp = crypto.randomInt(100000, 1000000).toString();
+		// const testEmail = "patient@example.com";
+		// const redisKey = `forget-password-otp:${testEmail}`;
 
-		const result = UserZodSchema.parse(payload);
+		// let storedOtp: string | null = null;
+		// let redisStatus = "disconnected";
 
-		console.log(result);
+		// try {
+		// 	if (redisClient.isOpen) {
+		// 		await redisClient.set(redisKey, otp, {
+		// 			EX: 60,
+		// 		});
+		// 		storedOtp = await redisClient.get(redisKey);
+		// 		redisStatus = "connected";
+		// 	}
+		// } catch (redisError) {
+		// 	console.log("Redis operation failed:", redisError);
+		// 	redisStatus = "error";
+		// }
+
+		// const data = {
+		// 	generatedOtp: otp,
+		// 	storedOtp,
+		// 	redisKey,
+		// 	redisStatus,
+		// 	expiresInSeconds: 60,
+		// };
 
 		res.status(httpStatus.OK).json({
 			success: true,
+			statusCode: httpStatus.OK,
 			message: "Welcome to PH Healthcare System Backend",
-			data: result,
+			data: otp,
 		});
 	} catch (error) {
 		console.log(error);
@@ -61,7 +106,9 @@ app.post("/zod", async (req: Request, res: Response, next: NextFunction) => {
 app.get("/", async (req: Request, res: Response) => {
 	res.status(httpStatus.OK).json({
 		success: true,
+		statusCode: httpStatus.OK,
 		message: "Welcome to PH Healthcare System Backend",
+		data: null,
 	});
 });
 

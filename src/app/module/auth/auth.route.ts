@@ -32,6 +32,13 @@ router.post(
 );
 
 router.post(
+	"/verify-email",
+	validateRequest(UserValidation.verifyEmailZodSchema),
+
+	AuthController.verifyPatientEmail,
+);
+
+router.post(
 	"/login",
 	validateRequest(UserValidation.loginUserZodSchema),
 	AuthController.loginUser,

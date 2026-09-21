@@ -10,6 +10,7 @@ import crypto from "crypto";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import { jwtUtils } from "../../utils/jwt";
+import ejs from "ejs";
 import type {
 	IForgotPasswordPayload,
 	IGoogleLoginPayload,
@@ -21,6 +22,8 @@ import type {
 import { OAuth2Client, type TokenPayload } from "google-auth-library";
 import { googleClient } from "../../lib/googleAuth";
 import { redisClient } from "../../lib/redis";
+import { transporter } from "../../lib/nodemailer";
+import path from "path";
 
 const registerPatient = async (payload: IRegisterPatientPayload) => {
 	const { name, password, patient: patientData } = payload;
@@ -391,11 +394,31 @@ const forgotPassword = async (payload: IForgotPasswordPayload) => {
 
 	const key = `forgot-password-otp:${isUserExists.email}`;
 
+	const expirationTime = 5 * 60;
 	await redisClient.set(key, otp, {
 		expiration: {
 			type: "EX",
-			value: 5 * 60,
+			value: expirationTime,
 		},
+	});
+
+	const tempatePath = path.join(
+		process.cwd(),
+		"src/app/templates/forgot-password.ejs",
+	);
+
+	const html = await ejs.renderFile(tempatePath, {
+		name: isUserExists.name,
+		otp,
+		expirationTime: expirationTime / 60,
+	});
+	await transporter.sendMail({
+		from: config.email_sender,
+		to: isUserExists.email,
+		subject: "Forgot password OTP",
+		// text: `Your OTP is ${otp}`,
+		// html: `<p>Your OTP is <b>${otp}</b></p>`,
+		html,
 	});
 };
 
@@ -460,6 +483,28 @@ const resetPassword = async (payload: IResetPasswordPayload) => {
 	});
 
 	await redisClient.del([key]);
+	const tempatePath = path.join(
+		process.cwd(),
+		"src/app/templates/reset-password-success.ejs",
+	);
+
+	const html = await ejs.renderFile(tempatePath, {
+		user: {
+			name: isUserExists.name,
+		},
+		change_date: new Date().toLocaleString(),
+		login_url: config.frontend_url ?? "#",
+		support_url: config.frontend_url ?? "#",
+	});
+
+	await transporter.sendMail({
+		from: config.email_sender,
+		to: isUserExists.email,
+		subject: "Password changed successfully",
+		// text: `Your OTP is ${otp}`,
+		// html: `<p>Your OTP is <b>${otp}</b></p>`,
+		html,
+	});
 };
 
 export const AuthService = {

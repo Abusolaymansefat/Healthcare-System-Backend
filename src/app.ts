@@ -16,6 +16,7 @@ import { AuthRoutes } from "./app/module/auth/auth.route";
 import { redisClient } from "./app/lib/redis";
 import { UserRoutes } from "./app/module/user/user.route";
 import { getBkashIdToken } from "./app/lib/bkash";
+import { AppointmentRoutes } from "./app/module/appointment/appointment.route";
 // import { getBkashIdToken } from "./app/lib/bkash";
 
 const app: Application = express();
@@ -36,6 +37,7 @@ app.use(cookieParser());
 
 app.use("/api/v1/auth", AuthRoutes);
 app.use("/api/v1/user", UserRoutes);
+app.use("/api/v1/appointment", AppointmentRoutes);
 
 // zod testing route
 // app.post("/zod", async (req: Request, res: Response, next: NextFunction) => {
@@ -74,7 +76,7 @@ app.get("/test", async (req: Request, res: Response, next: NextFunction) => {
 			success: true,
 			statusCode: httpStatus.OK,
 			message: "Welcome to PH Healthcare System Backend",
-			data: grantIdTokenResult,
+			data: null,
 		});
 	} catch (error) {
 		console.log(error);

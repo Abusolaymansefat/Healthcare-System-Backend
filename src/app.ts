@@ -15,6 +15,8 @@ import { notFound } from "./app/middleware/notFound";
 import { AuthRoutes } from "./app/module/auth/auth.route";
 import { redisClient } from "./app/lib/redis";
 import { UserRoutes } from "./app/module/user/user.route";
+import { getBkashIdToken } from "./app/lib/bkash";
+// import { getBkashIdToken } from "./app/lib/bkash";
 
 const app: Application = express();
 
@@ -64,39 +66,15 @@ app.use("/api/v1/user", UserRoutes);
 
 app.get("/test", async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const otp = crypto.randomInt(100000, 1000000).toString();
-		// const testEmail = "patient@example.com";
-		// const redisKey = `forget-password-otp:${testEmail}`;
+		const grantIdTokenResult = await getBkashIdToken();
 
-		// let storedOtp: string | null = null;
-		// let redisStatus = "disconnected";
-
-		// try {
-		// 	if (redisClient.isOpen) {
-		// 		await redisClient.set(redisKey, otp, {
-		// 			EX: 60,
-		// 		});
-		// 		storedOtp = await redisClient.get(redisKey);
-		// 		redisStatus = "connected";
-		// 	}
-		// } catch (redisError) {
-		// 	console.log("Redis operation failed:", redisError);
-		// 	redisStatus = "error";
-		// }
-
-		// const data = {
-		// 	generatedOtp: otp,
-		// 	storedOtp,
-		// 	redisKey,
-		// 	redisStatus,
-		// 	expiresInSeconds: 60,
-		// };
+		console.log(grantIdTokenResult);
 
 		res.status(httpStatus.OK).json({
 			success: true,
 			statusCode: httpStatus.OK,
 			message: "Welcome to PH Healthcare System Backend",
-			data: otp,
+			data: grantIdTokenResult,
 		});
 	} catch (error) {
 		console.log(error);

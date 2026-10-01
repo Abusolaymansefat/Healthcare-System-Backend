@@ -12,12 +12,12 @@ export const getBkashIdToken = async () => {
 
 		const bkashRefreshTokenTtl = await redisClient.ttl(RefreshTokenKey);
 
-		console.log(
-			bkashIdToken,
-			bkashIdTokenTTl,
-			bkashRefreshToken,
-			bkashRefreshTokenTtl,
-		);
+		// console.log(
+		// 	bkashIdToken,
+		// 	bkashIdTokenTTl,
+		// 	bkashRefreshToken,
+		// 	bkashRefreshTokenTtl,
+		// );
 
 		// bkash id token remaining time is less than 10 minutes and refresh token is available
 		if (
@@ -26,7 +26,7 @@ export const getBkashIdToken = async () => {
 			bkashRefreshTokenTtl >= 600
 		) {
 			const refreshTokenResponse = await fetch(
-				`${config.bkash_base_url}/tokenized-checkout/auth/refresh-token`,
+				`${config.bkash_base_url}/tokenized/checkout/token/refresh`,
 				{
 					method: "POST",
 					headers: {

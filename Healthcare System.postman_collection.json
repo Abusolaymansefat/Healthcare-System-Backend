@@ -70,7 +70,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n   \"email\": \"abusolayman01@gmail.com\",\r\n    \"password\": \"Password123@\"\r\n}",
+              "raw": "{\r\n    \"email\": \"abusolayman01@gmail.com\",\r\n    \"password\": \"Password123@\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -302,6 +302,42 @@
                 "v1",
                 "user",
                 "profile-image"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Appointment",
+      "item": [
+        {
+          "name": "Book Appointment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"doctorId\": \"TR0011NaM01uE1789885888970\",\r\n    \"appointmentDate\": \"2026-09-25t10:00:00.000z\",\r\n    \"notes\": \"First time appointment\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/appointment/book-appointment",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "appointment",
+                "book-appointment"
               ]
             }
           },

@@ -17,7 +17,6 @@ enum Gender {
   OTHER
 }
 
-
 enum AuthProvider {
   GOOGLE
   CREDENTIAL
@@ -37,4 +36,11 @@ enum PaymentStatus {
   FAILED
   CANCELED
   REFUNDED
+  REFUND_FAILED
+}
+
+enum DoctorVerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }

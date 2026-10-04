@@ -1,0 +1,5 @@
+ALTER TABLE "appointments"
+    ADD COLUMN IF NOT EXISTS "appointmentDate" TIMESTAMP(3),
+    ADD COLUMN IF NOT EXISTS "doctorId" TEXT,
+    ADD COLUMN IF NOT EXISTS "notes" TEXT,
+    ADD COLUMN IF NOT EXISTS "userId" TEXT;

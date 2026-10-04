@@ -4,6 +4,10 @@ model Appointment {
 
       status AppointmentStatus @default(PENDING)
 
+      doctorId String?
+      userId String?
+      appointmentDate DateTime?
+      notes String?
 
       createdAt DateTime @default(now())
       updatedAt DateTime @updatedAt

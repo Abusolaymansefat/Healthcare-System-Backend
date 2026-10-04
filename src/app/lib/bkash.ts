@@ -35,6 +35,7 @@ export const getBkashIdToken = async () => {
 						Accept: "application/json",
 						username: config.bkash_username,
 						password: config.bkash_password,
+						Date: new Date().toUTCString(),
 					},
 					body: JSON.stringify({
 						app_key: config.bkash_app_key,
@@ -51,7 +52,7 @@ export const getBkashIdToken = async () => {
 			await redisClient.set(idTokenKey, bkashIdToken, {
 				expiration: {
 					type: "EX",
-					value: 60 * 60, // 1 hour
+					value: 60 * 60,
 				},
 			});
 
@@ -73,6 +74,7 @@ export const getBkashIdToken = async () => {
 					Accept: "application/json",
 					username: config.bkash_username,
 					password: config.bkash_password,
+					Date: new Date().toUTCString(),
 				},
 				body: JSON.stringify({
 					app_key: config.bkash_app_key,
@@ -81,7 +83,11 @@ export const getBkashIdToken = async () => {
 			},
 		);
 
+		console.log("Token grant response status:", response.status);
+
 		if (!response.ok) {
+			const errorText = await response.text();
+			console.error("Token grant error:", errorText);
 			throw new Error("Failed to get bkash id token");
 		}
 		const result = await response.json();
@@ -103,6 +109,11 @@ export const getBkashIdToken = async () => {
 		});
 
 		bkashIdToken = result.id_token;
+
+		console.log(
+			"Generated bKash ID Token:",
+			bkashIdToken?.substring(0, 50) + "...",
+		);
 
 		return bkashIdToken;
 	} catch (error: any) {

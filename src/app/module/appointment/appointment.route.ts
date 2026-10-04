@@ -1,13 +1,25 @@
 import { Router } from "express";
-import { AppointmentController } from "./appointment.controller";
 import { auth } from "../../middleware/checkAuth";
+import { AppointmentController } from "./appointment.controller";
+import { Role } from "../../../generated/prisma/enums";
 
 const router = Router();
 
 router.post(
 	"/book-appointment",
-	auth("PATIENT"),
+	auth(Role.PATIENT),
 	AppointmentController.bookAppointment,
+);
+
+router.post(
+	"/pay-appointment",
+	auth(Role.PATIENT),
+	AppointmentController.payAppointment,
+);
+router.post(
+	"/cancel-appointment",
+	auth(Role.PATIENT, Role.ADMIN, Role.SUPER_ADMIN),
+	AppointmentController.cancelAppointment,
 );
 
 // book appointment callback route

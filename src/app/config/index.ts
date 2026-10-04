@@ -43,4 +43,8 @@ export default {
 	bkash_app_key: process.env.BKASH_APP_KEY!,
 	bkash_app_secret: process.env.BKASH_APP_SECRET!,
 	bkash_callback_url: process.env.BKASH_CALLBACK_URL!,
+	bkash_aws_access_key: process.env.BKASH_AWS_ACCESS_KEY,
+	bkash_aws_secret_key: process.env.BKASH_AWS_SECRET_KEY,
+	bkash_aws_region: process.env.BKASH_AWS_REGION ?? "ap-southeast-1",
+	bkash_aws_service: process.env.BKASH_AWS_SERVICE ?? "execute-api",
 };

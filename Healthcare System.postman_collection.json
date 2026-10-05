@@ -319,7 +319,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"doctorId\": \"TR0011NaM01uE1789885888970\",\r\n    \"appointmentDate\": \"2026-09-25t10:00:00.000z\",\r\n    \"notes\": \"First time appointment\"\r\n}",
+              "raw": "{\r\n    \"doctorId\": \"TR0011oos1AV71791036293277\",\r\n    \"appointmentDate\": \"2026-09-25t10:00:00.000z\",\r\n    \"notes\": \"First time appointment\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -338,6 +338,122 @@
                 "v1",
                 "appointment",
                 "book-appointment"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pay Appointment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"appointmentId\": \"e7fa5736-5cf1-46e5-aeaa-bdc0cad7b7cd\",\n    \"appointmentDate\": \"2026-09-25T10:00:00.000Z\",\n    \"notes\": \"First time appointment\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/appointment/pay-appointment",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "appointment",
+                "pay-appointment"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "cancel Appointment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"appointmentId\": \"b9b77e7d-e601-48a3-8229-dc5378b4927f\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/appointment/cancel-appointment",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "appointment",
+                "cancel-appointment"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Doctor",
+      "item": [
+        {
+          "name": "Apply Doctor",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "parsedPayload",
+                  "value": "{  \n  \"user\": {\n    \"name\": \"Dr. Alex Mercer\",\n    \"email\": \"alex.mercer@example.com\"\n  },\n  \"doctor\": {\n    \"address\": \"789 Childrens Way, Austin, TX\",\n    \"specialization\": \"Pediatrics\",\n    \"licenseNumber\": \"PED-778899002\",\n    \"qualifications\": \"MBBS, DCH, FCPS (Pediatrics)\",\n    \"experience\": 5,\n    \"consultationFee\": 120.50,\n    \"contactNumber\": \"+15125550199\",\n    \"bio\": \"Dedicated pediatrician focused on adolescent health, early childhood development, and routine immunizations.\"\n  }\n}\n",
+                  "type": "text"
+                },
+                {
+                  "key": "resumeFile",
+                  "type": "file",
+                  "src": [
+                    "/C:/Users/DELL/Downloads/IntermediateO-A Levels 12 year Education.pdf"
+                  ]
+                },
+                {
+                  "key": "additionalFiles",
+                  "type": "file",
+                  "src": [
+                    "/C:/Users/DELL/Downloads/IntermediateO-A Levels 12 year Education.pdf",
+                    "/C:/Users/DELL/Downloads/Secondary School Certificate Matriculation O level.pdf",
+                    "/C:/Users/DELL/Downloads/SSC.jpd.pdf",
+                    "/C:/Users/DELL/Downloads/HSC.jpg.pdf"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/doctor/apply-doctor",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "doctor",
+                "apply-doctor"
               ]
             }
           },

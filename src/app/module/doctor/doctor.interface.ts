@@ -10,7 +10,7 @@ export interface IApplyDoctorPayload {
 		specialization: string;
 		licenseNumber: string;
 		qualifications: string;
-		experienceYears: number;
+		experience: number;
 		bio?: string;
 		consultationFee?: number;
 		contactNumber?: string;

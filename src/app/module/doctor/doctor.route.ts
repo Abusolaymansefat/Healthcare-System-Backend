@@ -37,4 +37,5 @@ router.get(
 	auth(Role.SUPER_ADMIN, Role.ADMIN),
 	DoctorController.getAllDoctor,
 );
+
 export const DoctorRoutes = router;

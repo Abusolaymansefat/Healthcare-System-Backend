@@ -3,10 +3,11 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import { UserService } from "./user.service";
+import { AppError } from "../../utils/appError";
 
 const uploadProfileImage = catchAsync(async (req: Request, res: Response) => {
 	if (!req.file) {
-		throw new Error("No file uploaded");
+		throw new AppError(httpStatus.BAD_REQUEST, "No file uploaded");
 	}
 
 	const userId = req.user?.userId;

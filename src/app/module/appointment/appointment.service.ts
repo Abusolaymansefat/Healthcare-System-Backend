@@ -7,6 +7,8 @@ import config from "../../config";
 import { getBkashIdToken } from "../../lib/bkash";
 import { prisma } from "../../lib/prisma";
 import { RequestUser } from "../../middleware/checkAuth";
+import { AppError } from "../../utils/appError";
+import httpStatus from "http-status";
 
 //  create a function to book appointment and return the bkash card payment result
 const bookAppointment = async (payload: any, user: RequestUser) => {
@@ -18,7 +20,10 @@ const bookAppointment = async (payload: any, user: RequestUser) => {
 		});
 		const bakashIdToken = await getBkashIdToken();
 		if (!bakashIdToken) {
-			throw new Error("Bkash Id Token Not Found");
+			throw new AppError(
+				httpStatus.INTERNAL_SERVER_ERROR,
+				"Bkash Id Token Not Found",
+			);
 		}
 
 		const bkashCardPaymentResponse = await fetch(
@@ -71,7 +76,7 @@ const bookAppointment = async (payload: any, user: RequestUser) => {
 const payAppointment = async (payload: any, user: RequestUser) => {
 	const appointmentId = payload.appointmentId;
 	if (typeof appointmentId !== "string" || !appointmentId.trim()) {
-		throw new Error("appointmentId is required");
+		throw new AppError(httpStatus.BAD_REQUEST, "appointmentId is required");
 	}
 
 	const amount = payload.amount || "590";
@@ -86,7 +91,10 @@ const payAppointment = async (payload: any, user: RequestUser) => {
 		});
 
 		if (appointment.status !== AppointmentStatus.PENDING) {
-			throw new Error("Appointment is not in pending status");
+			throw new AppError(
+				httpStatus.BAD_REQUEST,
+				"Appointment is not in pending status",
+			);
 		}
 
 		await tx.payment.upsert({
@@ -113,7 +121,10 @@ const payAppointment = async (payload: any, user: RequestUser) => {
 
 	const bakashIdToken = await getBkashIdToken();
 	if (!bakashIdToken) {
-		throw new Error("Bkash Id Token Not Found");
+		throw new AppError(
+			httpStatus.INTERNAL_SERVER_ERROR,
+			"Bkash Id Token Not Found",
+		);
 	}
 
 	const bkashCardPaymentResponse = await fetch(
@@ -163,7 +174,10 @@ const bookAppointmentCallback = async (query: Record<string, any>) => {
 		const paymentID = query.paymentID;
 
 		if (!paymentID) {
-			throw new Error("paymentId messing in query params");
+			throw new AppError(
+				httpStatus.BAD_REQUEST,
+				"paymentId messing in query params",
+			);
 		}
 
 		// bKash sends status as lowercase in query params
@@ -171,7 +185,7 @@ const bookAppointmentCallback = async (query: Record<string, any>) => {
 
 		if (!status) {
 			console.log("Query params received:", query);
-			throw new Error("payment status is messing");
+			throw new AppError(httpStatus.BAD_REQUEST, "payment status is messing");
 		}
 
 		let executePaymentResult;
@@ -180,7 +194,10 @@ const bookAppointmentCallback = async (query: Record<string, any>) => {
 		if (status.toLowerCase() === "success") {
 			const bkashIdToken = await getBkashIdToken();
 			if (!bkashIdToken) {
-				throw new Error("Bkash Id Token Not Found");
+				throw new AppError(
+					httpStatus.INTERNAL_SERVER_ERROR,
+					"Bkash Id Token Not Found",
+				);
 			}
 
 			const executePaymentResponse = await fetch(
@@ -311,20 +328,24 @@ const cancelAppointment = async (payload: any) => {
 
 		if (!existingAppointment) {
 			console.log("Appointment not found in database for id:", appointmentId);
-			throw new Error("Appointment does not exist");
+			throw new AppError(httpStatus.NOT_FOUND, "Appointment does not exist");
 		}
 
 		if (
 			existingAppointment.status === AppointmentStatus.ONGOING ||
 			existingAppointment.status === AppointmentStatus.COMPLETED
 		) {
-			throw new Error(
+			throw new AppError(
+				httpStatus.BAD_REQUEST,
 				`Cannot cancel ${existingAppointment.status.toLowerCase()} appointment`,
 			);
 		}
 
 		if (existingAppointment.status === AppointmentStatus.CANCELLED) {
-			throw new Error("Appointment is already cancelled");
+			throw new AppError(
+				httpStatus.BAD_REQUEST,
+				"Appointment is already cancelled",
+			);
 		}
 
 		const updatedAppointment = await tx.appointment.update({
@@ -338,7 +359,10 @@ const cancelAppointment = async (payload: any) => {
 
 		const bkashIdToken = await getBkashIdToken();
 		if (!bkashIdToken) {
-			throw new Error("Bkash Id Token Not Found");
+			throw new AppError(
+				httpStatus.INTERNAL_SERVER_ERROR,
+				"Bkash Id Token Not Found",
+			);
 		}
 
 		const bkashRefundResponse = await fetch(

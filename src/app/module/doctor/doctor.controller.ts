@@ -4,6 +4,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { DoctorService } from "./doctor.service";
 import { ApplyAsDoctorValidationZodSchema } from "./doctor.validation";
+import { AppError } from "../../utils/appError";
 
 const applyAsDoctor = catchAsync(async (req: Request, res: Response) => {
 	const files = req.files as { [fieldname: string]: Express.Multer.File[] };
@@ -22,7 +23,7 @@ const applyAsDoctor = catchAsync(async (req: Request, res: Response) => {
 		req.body.parsedPayload;
 
 	if (!dataField) {
-		throw new Error("Form data payload is missing");
+		throw new AppError(httpStatus.BAD_REQUEST, "Form data payload is missing");
 	}
 
 	const zodValidationResult = ApplyAsDoctorValidationZodSchema.safeParse(
@@ -30,7 +31,10 @@ const applyAsDoctor = catchAsync(async (req: Request, res: Response) => {
 	);
 
 	if (!zodValidationResult.success) {
-		throw new Error(zodValidationResult.error.issues[0].message);
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			zodValidationResult.error.issues[0].message,
+		);
 	}
 
 	const payload = zodValidationResult.data;

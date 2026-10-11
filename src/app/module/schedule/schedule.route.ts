@@ -1,0 +1,62 @@
+import { Router } from "express";
+import { auth } from "../../middleware/checkAuth";
+import { Role } from "../../../generated/prisma/enums";
+import { ScheduleController } from "./schedule.controller";
+import { validateRequest } from "../../middleware/validateRequest";
+import {
+	CreateScheduleValidationZodSchema,
+	UpdateScheduleValidationZodSchema,
+} from "./schedule.validation";
+
+const router = Router();
+
+router.post(
+	"/create-schedule",
+	auth(Role.DOCTOR),
+	validateRequest(CreateScheduleValidationZodSchema),
+	ScheduleController.createSchedule,
+);
+
+router.get(
+	"/my-schedule",
+	auth(Role.DOCTOR),
+	ScheduleController.getMySchedules,
+);
+
+router.get(
+	"/all-schedule",
+	auth(Role.ADMIN, Role.SUPER_ADMIN),
+	ScheduleController.getAllSchedules,
+);
+
+router.get(
+	"/today-schedule",
+	auth(Role.PATIENT),
+	ScheduleController.getTodaysSchedules,
+);
+
+router.patch(
+	"/update-schedule/:scheduleId",
+	auth(Role.DOCTOR),
+	validateRequest(UpdateScheduleValidationZodSchema),
+	ScheduleController.updateSchedule,
+);
+
+router.patch(
+	"/publish-schedule/:scheduleId",
+	auth(Role.DOCTOR, Role.ADMIN),
+	ScheduleController.publishSchedule,
+);
+
+router.get(
+	"/:scheduleId",
+	auth(Role.DOCTOR, Role.ADMIN, Role.SUPER_ADMIN),
+	ScheduleController.getScheduleById,
+);
+
+router.delete(
+	"/:scheduleId",
+	auth(Role.DOCTOR),
+	ScheduleController.deleteSchedule,
+);
+export const ScheduleRoutes = router;

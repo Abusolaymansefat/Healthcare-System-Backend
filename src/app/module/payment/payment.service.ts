@@ -1,10 +1,10 @@
+import httpStatus from "http-status";
 import { Role } from "../../../generated/prisma/enums";
 import { PaymentWhereInput } from "../../../generated/prisma/models";
 import { IQuery } from "../../../interfaces";
 import { prisma } from "../../lib/prisma";
 import { RequestUser } from "../../middleware/checkAuth";
 import { AppError } from "../../utils/appError";
-import httpStatus from "http-status";
 
 const getMyPayment = async (query: IQuery, user: RequestUser) => {
 	const limit = query.limit ? Number(query.limit) : 10;

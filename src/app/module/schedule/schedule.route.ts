@@ -29,11 +29,7 @@ router.get(
 	ScheduleController.getAllSchedules,
 );
 
-router.get(
-	"/today-schedule",
-	auth(Role.PATIENT),
-	ScheduleController.getTodaysSchedules,
-);
+router.get("/today-schedule", ScheduleController.getTodaysSchedules);
 
 router.patch(
 	"/update-schedule/:scheduleId",

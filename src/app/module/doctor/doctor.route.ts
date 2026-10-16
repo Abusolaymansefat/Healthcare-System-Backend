@@ -3,6 +3,16 @@ import { upload } from "../../lib/multer";
 import { DoctorController } from "./doctor.controller";
 import { auth } from "../../middleware/checkAuth";
 import { Role } from "../../../generated/prisma/enums";
+import {
+	validateParamsRequest,
+	validateQueryRequest,
+	validateRequest,
+} from "../../middleware/validateRequest";
+import {
+	DoctorPublicListQueryValidationZodSchema,
+	DoctorPublicProfileParamsValidationZodSchema,
+	UpdateDoctorProfileValidationZodSchema,
+} from "./doctor.validation";
 
 const router = Router();
 
@@ -36,6 +46,31 @@ router.get(
 	"/all-doctors",
 	auth(Role.SUPER_ADMIN, Role.ADMIN),
 	DoctorController.getAllDoctor,
+);
+
+router.get(
+	"/available-doctors",
+	validateQueryRequest(DoctorPublicListQueryValidationZodSchema),
+	DoctorController.getAvailableDoctors,
+);
+
+router.get(
+	"/public-doctors",
+	validateQueryRequest(DoctorPublicListQueryValidationZodSchema),
+	DoctorController.getAllDoctorListPublic,
+);
+
+router.get(
+	"/:doctorId/public-profile",
+	validateParamsRequest(DoctorPublicProfileParamsValidationZodSchema),
+	DoctorController.getSingleDoctorPublicProfile,
+);
+
+router.patch(
+	"/update-my-profile",
+	auth(Role.DOCTOR),
+	validateRequest(UpdateDoctorProfileValidationZodSchema),
+	DoctorController.updateDoctorProfile,
 );
 
 export const DoctorRoutes = router;

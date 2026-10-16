@@ -26,3 +26,35 @@ export const validateRequest = (zodSchema: z.ZodObject) => {
 		}
 	});
 };
+
+export const validateQueryRequest = (zodSchema: z.ZodObject) => {
+	return catchAsync((req: Request, res: Response, next: NextFunction) => {
+		const result = zodSchema.safeParse(req.query);
+
+		if (!result.success) {
+			throw new AppError(
+				httpStatus.BAD_REQUEST,
+				result.error.issues[0].message,
+			);
+		}
+
+		res.locals.validatedQuery = result.data;
+		next();
+	});
+};
+
+export const validateParamsRequest = (zodSchema: z.ZodObject) => {
+	return catchAsync((req: Request, res: Response, next: NextFunction) => {
+		const result = zodSchema.safeParse(req.params);
+
+		if (!result.success) {
+			throw new AppError(
+				httpStatus.BAD_REQUEST,
+				result.error.issues[0].message,
+			);
+		}
+
+		res.locals.validatedParams = result.data;
+		next();
+	});
+};

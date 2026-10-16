@@ -8,14 +8,13 @@ import {
 import { prisma } from "../../lib/prisma";
 import { RequestUser } from "../../middleware/checkAuth";
 import { AppError } from "../../utils/appError";
+import httpStatus from "http-status";
 import {
 	ICreateSchedulePayload,
 	IUpdateSchedulePayload,
 } from "./schedule.interface";
-import httpStatus from "http-status";
 import { IQuery } from "../../../interfaces";
 import { ScheduleWhereInput } from "../../../generated/prisma/models";
-import { th } from "zod/locales";
 import { ScheduleStatus } from "../../../generated/prisma/enums";
 
 // create schedule
@@ -68,8 +67,8 @@ const createShedule = async (
 	}
 
 	const durationInMinutes = differenceInMinutes(
-		payload.startDateTime,
 		payload.endDateTime,
+		payload.startDateTime,
 	);
 
 	const MINUTES_ALLOCATED_PER_SLOT = 20;
@@ -78,8 +77,8 @@ const createShedule = async (
 
 	const schedule = await prisma.schedule.create({
 		data: {
-			startDateTime: payload.startDateTime,
 			endDateTime: payload.endDateTime,
+			startDateTime: payload.startDateTime,
 			meetingLink: payload.meetingLink,
 			totalSlots,
 			availableSlots: totalSlots,
@@ -329,8 +328,8 @@ const updateSchedule = async (
 	// }
 
 	payload.meetingLink = payload.meetingLink || schedule.meetingLink;
-	payload.startDateTime = payload.startDateTime || schedule.startDateTime;
 	payload.endDateTime = payload.endDateTime || schedule.endDateTime;
+	payload.startDateTime = payload.startDateTime || schedule.startDateTime;
 
 	if (!isSameDay(payload.startDateTime, payload.endDateTime)) {
 		throw new AppError(
@@ -368,8 +367,8 @@ const updateSchedule = async (
 	}
 
 	const durationInMinutes = differenceInMinutes(
-		payload.startDateTime,
 		payload.endDateTime,
+		payload.startDateTime,
 	);
 
 	const MINUTES_ALLOCATED_PER_SLOT = 20;
@@ -379,8 +378,8 @@ const updateSchedule = async (
 	const updatedSchedule = await prisma.schedule.update({
 		where: { id: schedule.id },
 		data: {
-			startDateTime: payload.startDateTime,
 			endDateTime: payload.endDateTime,
+			startDateTime: payload.startDateTime,
 			meetingLink: payload.meetingLink,
 			totalSlots,
 			availableSlots: totalSlots,

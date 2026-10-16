@@ -89,3 +89,22 @@ export const UpdateDoctorProfileValidationZodSchema = z.object({
 		.min(5, "Contact number is invalid")
 		.optional(),
 });
+
+export const DoctorPublicListQueryValidationZodSchema = z.object({
+	page: z.coerce.number().int().min(1).default(1),
+	limit: z.coerce.number().int().min(1).max(100).default(10),
+	searchTerm: z.string().trim().min(1).max(100).optional(),
+	specialization: z.string().trim().min(1).max(100).optional(),
+	sortBy: z
+		.enum(["createdAt", "name", "experience", "consultationFee"])
+		.default("createdAt"),
+	sortOrder: z.enum(["asc", "desc"]).default("desc"),
+});
+
+export const DoctorPublicProfileParamsValidationZodSchema = z.object({
+	doctorId: z.uuid("Invalid doctor id"),
+});
+
+export type DoctorPublicListQuery = z.infer<
+	typeof DoctorPublicListQueryValidationZodSchema
+>;

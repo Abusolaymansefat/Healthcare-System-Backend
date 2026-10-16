@@ -10,8 +10,6 @@ import { RequestUser } from "../../middleware/checkAuth";
 import { AppError } from "../../utils/appError";
 
 const getAdminAnalytics = async () => {
-	// total Doctors
-
 	const totalDoctor = await prisma.doctor.count({
 		where: {
 			isDeleted: false,

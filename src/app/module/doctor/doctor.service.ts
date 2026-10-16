@@ -2,6 +2,7 @@ import { UploadApiResponse } from "cloudinary";
 import { prisma } from "../../lib/prisma";
 import { cloudinary } from "../../lib/cloudinary";
 import bcrypt from "bcryptjs";
+import httpStatus from "http-status";
 import config from "../../config";
 import {
 	DoctorVerificationStatus,
@@ -20,7 +21,6 @@ import {
 import { RequestUser } from "../../middleware/checkAuth";
 import { IQuery } from "../../../interfaces";
 import { AppError } from "../../utils/appError";
-import httpStatus from "http-status";
 import { DoctorWhereInput } from "../../../generated/prisma/models";
 
 const applyDoctor = async (
@@ -391,9 +391,12 @@ const getAllDoctor = async (query: IQuery) => {
 	};
 };
 
+const updateDoctorProfile = async (payload: any, user: RequestUser) => {};
+
 export const DoctorService = {
 	applyDoctor,
 	verifyDoctorEmail,
 	approveDoctor,
 	getAllDoctor,
+	updateDoctorProfile,
 };

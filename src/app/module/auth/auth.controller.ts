@@ -1,13 +1,22 @@
-import type { Request, Response } from "express";
+import type { CookieOptions, Request, Response } from "express";
 import httpStatus from "http-status";
+import z from "zod";
+import config from "../../config";
+import { AppError } from "../../utils/appError";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import type { IRequestUser } from "./auth.interface";
 import { AuthService } from "./auth.service";
-import config from "../../config";
-import z from "zod";
 import { UserValidation } from "./auth.validation";
-import { AppError } from "../../utils/appError";
+
+const isProduction = config.node_env === "production";
+
+const authCookieOptions = (maxAge: number): CookieOptions => ({
+	httpOnly: true,
+	secure: isProduction,
+	sameSite: isProduction ? "none" : "lax",
+	maxAge,
+});
 
 const registerPatient = catchAsync(async (req: Request, res: Response) => {
 	// const payload = UserValidation.patientRegitrationZodSchema.safeParse(req.body);
@@ -59,18 +68,16 @@ const verifyPatientEmail = catchAsync(async (req: Request, res: Response) => {
 
 	const { accessToken, refreshToken, user, patient } = result;
 
-	res.cookie("accessToken", accessToken, {
-		httpOnly: true,
-		secure: false,
-		sameSite: "none",
-		maxAge: 1000 * 60 * 60 * 24, // 24 hour or 1 day
-	});
-	res.cookie("refreshToken", refreshToken, {
-		httpOnly: true,
-		secure: false,
-		sameSite: "none",
-		maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-	});
+	res.cookie(
+		"accessToken",
+		accessToken,
+		authCookieOptions(1000 * 60 * 60 * 24),
+	);
+	res.cookie(
+		"refreshToken",
+		refreshToken,
+		authCookieOptions(1000 * 60 * 60 * 24 * 7),
+	);
 
 	sendResponse(res, {
 		statusCode: httpStatus.CREATED,
@@ -90,18 +97,16 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
 	const result = await AuthService.loginUser(payload);
 	const { accessToken, refreshToken } = result;
 
-	res.cookie("accessToken", accessToken, {
-		httpOnly: true,
-		secure: false,
-		sameSite: "none",
-		maxAge: 1000 * 60 * 60 * 24, // 24 hour or 1 day
-	});
-	res.cookie("refreshToken", refreshToken, {
-		httpOnly: true,
-		secure: false,
-		sameSite: "none",
-		maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-	});
+	res.cookie(
+		"accessToken",
+		accessToken,
+		authCookieOptions(1000 * 60 * 60 * 24),
+	);
+	res.cookie(
+		"refreshToken",
+		refreshToken,
+		authCookieOptions(1000 * 60 * 60 * 24 * 7),
+	);
 
 	sendResponse(res, {
 		statusCode: httpStatus.OK,
@@ -140,18 +145,16 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
 	const result = await AuthService.refreshToken(req.cookies.refreshToken);
 	const { accessToken, refreshToken: newRefreshToken } = result;
 
-	res.cookie("accessToken", accessToken, {
-		httpOnly: true,
-		secure: false,
-		sameSite: "none",
-		maxAge: 1000 * 60 * 60 * 24, // 24 hour or 1 day
-	});
-	res.cookie("refreshToken", newRefreshToken, {
-		httpOnly: true,
-		secure: false,
-		sameSite: "none",
-		maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-	});
+	res.cookie(
+		"accessToken",
+		accessToken,
+		authCookieOptions(1000 * 60 * 60 * 24),
+	);
+	res.cookie(
+		"refreshToken",
+		newRefreshToken,
+		authCookieOptions(1000 * 60 * 60 * 24 * 7),
+	);
 
 	sendResponse(res, {
 		statusCode: httpStatus.OK,
@@ -169,20 +172,16 @@ const googleLogin = catchAsync(async (req: Request, res: Response) => {
 	const result = await AuthService.googleLogin(payload);
 
 	const { accessToken, refreshToken } = result;
-	const isProduction = config.node_env === "production";
-
-	res.cookie("accessToken", accessToken, {
-		httpOnly: true,
-		secure: isProduction,
-		sameSite: "none",
-		maxAge: 1000 * 60 * 60 * 24, // 24 hour or 1 day
-	});
-	res.cookie("refreshToken", refreshToken, {
-		httpOnly: true,
-		secure: isProduction,
-		sameSite: "none",
-		maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-	});
+	res.cookie(
+		"accessToken",
+		accessToken,
+		authCookieOptions(1000 * 60 * 60 * 24),
+	);
+	res.cookie(
+		"refreshToken",
+		refreshToken,
+		authCookieOptions(1000 * 60 * 60 * 24 * 7),
+	);
 
 	sendResponse(res, {
 		statusCode: httpStatus.OK,

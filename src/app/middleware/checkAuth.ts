@@ -1,12 +1,12 @@
 import type { NextFunction, Request, Response } from "express";
+import httpStatus from "http-status";
 import type { JwtPayload } from "jsonwebtoken";
 import type { Role } from "../../generated/prisma/enums";
 import config from "../config";
 import { prisma } from "../lib/prisma";
+import { AppError } from "../utils/appError";
 import { catchAsync } from "../utils/catchAsync";
 import { jwtUtils } from "../utils/jwt";
-import { AppError } from "../utils/appError";
-import httpStatus from "http-status";
 
 export interface RequestUser {
 	email: string;
@@ -27,11 +27,11 @@ declare global {
 // auth() => ...requiredRoles => [Role.ADMIN, Role.USER, Role.AUTHOR]
 export const auth = (...requiredRoles: Role[]) => {
 	return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-		const token = req.cookies.accessToken
-			? req.cookies.accessToken
-			: req.headers.authorization?.startsWith("Bearer ")
-				? req.headers.authorization?.split(" ")[1]
-				: req.headers.authorization;
+		const authorization = req.headers.authorization;
+		const bearerToken = authorization?.startsWith("Bearer ")
+			? authorization.slice("Bearer ".length)
+			: authorization;
+		const token = bearerToken || req.cookies.accessToken;
 
 		if (!token) {
 			throw new AppError(

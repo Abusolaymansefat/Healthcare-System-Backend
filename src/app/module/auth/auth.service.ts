@@ -662,6 +662,8 @@ const resetPassword = async (payload: IResetPasswordPayload) => {
 	});
 };
 
+const logoutUser = async (user: IRequestUser) => {};
+
 export const AuthService = {
 	registerPatient,
 	verifyPatientEmail,

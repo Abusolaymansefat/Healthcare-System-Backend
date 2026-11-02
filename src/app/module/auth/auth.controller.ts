@@ -216,6 +216,18 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
 		data: null,
 	});
 });
+
+const logoutUser = catchAsync(async (req: Request, res: Response) => {
+	res.clearCookie("accessToken", authCookieOptions(0));
+	res.clearCookie("refreshToken", authCookieOptions(0));
+
+	sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: "User logged out successfully",
+		data: null,
+	});
+});
 export const AuthController = {
 	registerPatient,
 	verifyPatientEmail,
@@ -225,4 +237,5 @@ export const AuthController = {
 	googleLogin,
 	forgotPassword,
 	resetPassword,
+	logoutUser,
 };
